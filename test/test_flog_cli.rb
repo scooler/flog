@@ -46,6 +46,8 @@ class TestFlogCLI < FlogTest
       "--score"        => :score,
       "-v"             => :verbose,
       "--verbose"      => :verbose,
+      "-p"             => :precise,
+      "--precise"      => :precise,
     }.each do |key, val|
       assert_equal true, FlogCLI.parse_options(key)[val]
     end
@@ -149,6 +151,21 @@ class TestFlogCLI < FlogTest
      1.6: main#none
 "
 
+    assert_equal expected, o.string
+  end
+
+  def test_precise_report
+    setup_flog
+
+    @flog.option[:precise] = true
+    o = StringIO.new
+    @flog.report o
+
+    expected = "     1.6: flog total
+   1.600: flog/method average
+
+     1.6: main#none
+"
     assert_equal expected, o.string
   end
 

@@ -127,6 +127,10 @@ class FlogCLI
         option[:verbose] = true
       end
 
+      opts.on("-p", "--precise", "Display the average with higher precision.") do
+        option[:precise] = true
+      end
+
       opts.on("--18", "Use a ruby 1.8 parser.") do
         option[:parser] = Ruby18Parser
       end
@@ -227,7 +231,9 @@ class FlogCLI
 
   def report(io = $stdout)
     io.puts "%8.1f: %s" % [total_score, "flog total"]
-    io.puts "%8.1f: %s" % [average, "flog/method average"]
+
+    avg_format = option[:precise] ? "%8.3f" : "%8.1f"
+    io.puts "#{avg_format}: %s" % [average, "flog/method average"]
 
     return if option[:score]
 
